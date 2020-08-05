@@ -28,6 +28,10 @@ int main(int argc, char** argv){
   ros::Rate rate(10.0);
   while (node.ok()){
     geometry_msgs::TransformStamped transformStamped;
+    while(!tfBuffer.canTransform("turtle2", "turtle1", ros::Time(0), ros::Duration(0.5)))
+    {
+      ROS_ERROR_STREAM("can't hear!\n");
+    }
     try{
       transformStamped = tfBuffer.lookupTransform("turtle2", "turtle1",
                                ros::Time(0));
@@ -44,6 +48,10 @@ int main(int argc, char** argv){
                                     transformStamped.transform.translation.x);
     vel_msg.linear.x = 0.5 * sqrt(pow(transformStamped.transform.translation.x, 2) +
                                   pow(transformStamped.transform.translation.y, 2));
+
+    // vel_msg.angular.z = 0;
+    // vel_msg.linear.x = 0;
+
     turtle_vel.publish(vel_msg);
     
     rate.sleep();

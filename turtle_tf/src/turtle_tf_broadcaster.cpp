@@ -11,6 +11,7 @@ void poseCallback(const turtlesim::PoseConstPtr& msg){
   tf::Quaternion q;
   q.setRPY(0, 0, msg->theta);
   transform.setRotation(q);
+  ROS_INFO_STREAM("broadcast x: "<<msg->x<<" y:"<<msg->y);
   br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", turtle_name));
 }
 
